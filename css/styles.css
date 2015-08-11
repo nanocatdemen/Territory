@@ -1,0 +1,11 @@
+canvas {
+  border-style: solid;
+  border-width: 3px;
+}
+body {
+  margin: 0px;
+}
+#log {
+  margin-top: 6px;
+  margin-left: 6px;
+}
