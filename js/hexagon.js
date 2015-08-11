@@ -1,22 +1,21 @@
 Hexagon = (function($) {
 
-  var Hexagon = function(center, edge, orientation, canvas) {
+  var Hexagon = function(canvas, options) {
     var self = {
-      center: center,
-      edge: edge,
-      orientation: orientation,
+      center: options.center,
+      edgeSize: options.edgeSize,
+      orientation: options.orientation,
       canvas: canvas,
-      strokeColor: '#000000',
-      fillColor: '#FFFFFF',
-      width: 2
+      strokeColor: options.strokeColor || '#000000',
+      fillColor: options.fillColor || '#FFFFFF'
     };
 
     self.corner = function(i) {
       var angleDeg = 60 * i;
       var angleRad = Math.PI / 180 * angleDeg;
       return {
-        x: self.center.x + self.edge * Math.cos(angleRad),
-        y: self.center.y + self.edge * Math.sin(angleRad)
+        x: self.center.x + self.edgeSize * Math.cos(angleRad),
+        y: self.center.y + self.edgeSize * Math.sin(angleRad)
       };
     };
 
@@ -37,6 +36,7 @@ Hexagon = (function($) {
       self.canvas.add(self.polygon);
     };
 
+    //TODO: Fix this
     self.setStrokeColor = function(color) {
       self.strokeColor = color;
       return self;
@@ -48,19 +48,17 @@ Hexagon = (function($) {
       return self;
     }
 
-    self.setWidth = function(width) {
-      self.width = width;
-      return self;
-    }
-
     self.update = function() {
       self.draw();
     }
 
-    self.on = function(event, callback) {
-      console.log(callback);
-      $(self).on(event, callback);
+    self.onMouseOver = function(callback) {
     }
+
+    self.onClick = function(callback) {
+    }
+
+    //ETC
 
     return self;
   };
