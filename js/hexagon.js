@@ -28,4 +28,6 @@ var Hexagon = fabric.util.createClass(fabric.Polygon, {
     });
   },
 
+  //TODO: Rewrite events to accomodate the hexagon borders (Piggyback?)
+
 });

@@ -1,9 +1,11 @@
-canvas {
-  border-style: solid;
-  border-width: 3px;
-}
 body {
   margin: 0px;
+}
+.canvas-container {
+  border-style: solid;
+  border-width: 1;
+  border-color: #1F8ACF;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
 }
 #log {
   margin-top: 6px;

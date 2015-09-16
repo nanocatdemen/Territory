@@ -18,10 +18,11 @@ Grid = (function($) {
           y: center.y + (Math.sqrt(3) / 2) * hexagonSize * z - Math.sqrt(3) / 2 * hexagonSize * y
         };
         var hexagon = new Hexagon(hexagonCenter, 50, {
-            fill: '#F5C9C9',
-            stroke: '#000000',
+            fill: '#D3E5F0',
+            stroke: '#1F8ACF',
             selectable: false
           });
+        hexagon.perPixelTargetFind = true;
         hexagons.set({
           x: x,
           y: y,
