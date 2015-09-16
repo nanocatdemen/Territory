@@ -1,3 +1,4 @@
+//TODO: Investigate if extending from fabric.Group is worth it
 CubeCoordinateSet = (function($) {
 
   var CubeCoordinateSet = function() {
