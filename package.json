@@ -1,0 +1,35 @@
+{
+  "name": "Territory",
+  "description": "A game about Territories.",
+  "version": "0.0.1-b",
+  "dependencies": {
+    "jquery": "^1.11.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.6"
+  },
+  "author": "Fernando Morales <nanocatdemen@gmail.com>",
+  "license": "APACHE-2.0",
+  "main": "dist/territory.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nanocatdemen/Territory.git"
+  },
+  "keywords": [
+    "game",
+    "strategy",
+    "territory"
+  ],
+  "bugs": {
+    "url": "https://github.com/nanocatdemen/city-Territory/issues"
+  },
+  "homepage": "https://github.com/nanocatdemen/Territory"
+}

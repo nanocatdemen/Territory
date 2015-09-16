@@ -21,14 +21,6 @@ CubeCoordinateSet = (function($) {
 
     var nextIndex = 0;
 
-    // This shouldn't work on IE
-    self[Symbol.iterator] = function*() {
-      var i = 0;
-      for (e in elements) {
-        yield elements[e];
-      }
-    }
-
     return self;
   };
 
