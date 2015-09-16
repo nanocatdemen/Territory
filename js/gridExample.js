@@ -4,6 +4,8 @@ var canvas = new fabric.Canvas('c', {
   height: 800
 });
 
+canvas.selection = false;
+
 //The center of the canvas
 var center = {
   x: 400,
