@@ -17,6 +17,8 @@ var Hexagon = fabric.util.createClass(fabric.Polygon, {
     }
 
     this.callSuper('initialize', corners, options);
+    // This is to don't overlap hexagon borders
+    this.set('perPixelTargetFind', true);
     this.set('center', center);
     this.set('edgeSize', edgeSize);
   },
@@ -26,8 +28,6 @@ var Hexagon = fabric.util.createClass(fabric.Polygon, {
       center: this.get('center'),
       size: this.get('edgeSize')
     });
-  },
-
-  //TODO: Rewrite events to accomodate the hexagon borders (Piggyback?)
+  }
 
 });

@@ -12,8 +12,8 @@ var sources = [
   'src/js/cubeCoordinateSet.js',
   'src/js/hexagon.js',
   'src/js/grid.js',
-  'src/js/gridExample.js',
-  'src/js/event.js'
+  'src/config.js',
+  'src/main.js'
 ];
 
 var mimetype = {
@@ -22,36 +22,6 @@ var mimetype = {
   '.txt': 'text/plain',
   '.html': 'text/html'
 };
-
-// Web server
-gulp.task('serve', function() {
-  var fs = require('fs');
-  var path = require('path');
-
-  connect.server({
-    port: 8000,
-    livereload: true,
-    middleware: function(app, opt) {
-      return [function(request, response, next) {
-        var basename = path.basename(request.url);
-        var ext = path.extname(basename);
-
-        // Check if /dist/basename exists otherwise return the file
-        fs.readFile(path.join('dist', basename), function(err, data) {
-          if (err) {
-            return next();
-          }
-
-          if (ext in mimetype) {
-            response.setHeader('Content-Type', mimetype[ext]);
-          }
-
-          response.end(data);
-        });
-      }];
-    }
-  });
-});
 
 // Concatenate & Minify JS
 gulp.task('scripts', function() {
@@ -70,4 +40,4 @@ gulp.task('watch', function() {
 });
 
 // Default Task
-gulp.task('default', ['scripts', 'serve', 'watch']);
+gulp.task('default', ['scripts', 'watch']);

@@ -1,28 +1,19 @@
-//TODO: Investigate if extending from fabric.Group is worth it
-CubeCoordinateSet = (function($) {
+var CubeCoordinateSet = function() {
 
-  var CubeCoordinateSet = function() {
+  this.elements = {};
 
-    var elements = {};
+}
 
-    var self = {
-      elements: elements
-    };
+CubeCoordinateSet.prototype.get = function(coordinate) {
 
-    self.get = function(coordinate) {
-      if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
-      return self.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()]
-    }
+  if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
+  return this.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()]
 
-    self.set = function(coordinate, v) {
-      if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
-      self.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()] = v;
-    }
+}
 
-    var nextIndex = 0;
+CubeCoordinateSet.prototype.set = function(coordinate, v) {
 
-    return self;
-  };
+  if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
+  this.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()] = v;
 
-  return CubeCoordinateSet;
-})(jQuery);
+}

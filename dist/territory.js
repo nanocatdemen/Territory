@@ -1,31 +1,22 @@
-//TODO: Investigate if extending from fabric.Group is worth it
-CubeCoordinateSet = (function($) {
+var CubeCoordinateSet = function() {
 
-  var CubeCoordinateSet = function() {
+  this.elements = {};
 
-    var elements = {};
+}
 
-    var self = {
-      elements: elements
-    };
+CubeCoordinateSet.prototype.get = function(coordinate) {
 
-    self.get = function(coordinate) {
-      if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
-      return self.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()]
-    }
+  if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
+  return this.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()]
 
-    self.set = function(coordinate, v) {
-      if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
-      self.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()] = v;
-    }
+}
 
-    var nextIndex = 0;
+CubeCoordinateSet.prototype.set = function(coordinate, v) {
 
-    return self;
-  };
+  if (coordinate.x + coordinate.y + coordinate.z != 0) throw 'Error: invalid cube coordinate'
+  this.elements[coordinate.x.toString() + ',' + coordinate.y.toString() + ',' + coordinate.z.toString()] = v;
 
-  return CubeCoordinateSet;
-})(jQuery);
+}
 
 var Hexagon = fabric.util.createClass(fabric.Polygon, {
 
@@ -46,6 +37,8 @@ var Hexagon = fabric.util.createClass(fabric.Polygon, {
     }
 
     this.callSuper('initialize', corners, options);
+    // This is to don't overlap hexagon borders
+    this.set('perPixelTargetFind', true);
     this.set('center', center);
     this.set('edgeSize', edgeSize);
   },
@@ -55,117 +48,94 @@ var Hexagon = fabric.util.createClass(fabric.Polygon, {
       center: this.get('center'),
       size: this.get('edgeSize')
     });
-  },
-
-  //TODO: Rewrite events to accomodate the hexagon borders (Piggyback?)
+  }
 
 });
 
-Grid = (function($) {
+var Grid = function(hexagonsCoors, options) {
 
-  var Grid = function(hexagonsCoors, options) {
+  //TODO: Provide default values or exceptions
+  this.canvas = options.canvas;
+  var hexagonSize = options.hexagonSize;
+  var center = options.center;
 
-    //TODO: Provide default values or exceptions
-    var canvas = options.canvas;
-    var hexagonSize = options.hexagonSize;
-    var center = options.center;
-
-    var hexagons = CubeCoordinateSet();
-    for (hexagonCoorKey in hexagonsCoors) {
-      var x = hexagonsCoors[hexagonCoorKey][0];
-      var y = hexagonsCoors[hexagonCoorKey][1];
-      var z = hexagonsCoors[hexagonCoorKey][2];
-      if (x + y + z == 0) {
-        var hexagonCenter = {
-          x: center.x + 3 / 2 * hexagonSize * x,
-          y: center.y + (Math.sqrt(3) / 2) * hexagonSize * z - Math.sqrt(3) / 2 * hexagonSize * y
-        };
-        var hexagon = new Hexagon(hexagonCenter, 50, {
-          fill: '#D3E5F0',
-          stroke: '#1F8ACF',
-          selectable: false
-        });
-        //TODO: Put this in hexagon constructor
-        hexagon.perPixelTargetFind = true;
-        hexagons.set({
-          x: x,
-          y: y,
-          z: z
-        }, hexagon);
-      }
+  this.hexagons = new CubeCoordinateSet();
+  for (hexagonCoorKey in hexagonsCoors) {
+    var x = hexagonsCoors[hexagonCoorKey][0];
+    var y = hexagonsCoors[hexagonCoorKey][1];
+    var z = hexagonsCoors[hexagonCoorKey][2];
+    if (x + y + z == 0) {
+      var hexagonCenter = {
+        x: center.x + 3 / 2 * hexagonSize * x,
+        y: center.y + (Math.sqrt(3) / 2) * hexagonSize * z - Math.sqrt(3) / 2 * hexagonSize * y
+      };
+      var hexagon = new Hexagon(hexagonCenter, 50, {
+        fill: '#D3E5F0',
+        stroke: '#1F8ACF',
+        selectable: false
+      });
+      this.hexagons.set({
+        x: x,
+        y: y,
+        z: z
+      }, hexagon);
     }
+  }
 
-    var self = {
-      canvas: canvas,
-      hexagons: hexagons
-    };
+}
 
-    self.draw = function() {
-      for (hexagonKey in self.hexagons.elements) {
-        self.canvas.add(self.hexagons.elements[hexagonKey]);
-      }
-    };
+Grid.prototype.draw = function() {
+  for (hexagonKey in this.hexagons.elements) {
+    this.canvas.add(this.hexagons.elements[hexagonKey]);
+  }
+};
 
-    return self;
+var config = {};
+
+(function() {
+
+  var size = {
+    width: 800,
+    height: 800
   };
 
-  return Grid;
-})(jQuery);
+  //The center of the canvas
+  var center = {
+    x: size.width / 2,
+    y: size.height / 2
+  };
+
+  //Which hexagons are we going to draw
+  var hexagonsCoors = [
+    [0, 0, 0],
+    [0, 1, -1],
+    [0, -1, 1],
+    [1, 0, -1],
+    [-1, 0, 1],
+    [1, -1, 0],
+    [-1, 1, 0]
+  ];
+
+  var hexagonSize = 50;
+
+  $.extend(config, {size: size}, {center: center}, {hexagonsCoors: hexagonsCoors}, {hexagonSize: hexagonSize});
+
+})();
 
 //The canvas on we will draw
-var canvas = new fabric.Canvas('c', {
-  width: 800,
-  height: 800
-});
+var canvas = new fabric.Canvas('c', config.size);
 
 canvas.selection = false;
 
-//The center of the canvas
-var center = {
-  x: 400,
-  y: 400
-};
-
-//Which hexagons are we going to draw
-var hexagonsCoors = [
-  [0, 0, 0],
-  [0, 1, -1],
-  [0, -1, 1],
-  [1, 0, -1],
-  [-1, 0, 1],
-  [1, -1, 0],
-  [-1, 1, 0]
-];
-
 //The grid
-var g = Grid(hexagonsCoors, {
+var g = new Grid(config.hexagonsCoors, {
   canvas: canvas,
-  hexagonSize: 50,
-  center: center
+  hexagonSize: config.hexagonSize,
+  center: config.center
 });
 
 //Draw the grid
 g.draw();
-
-/*canvas.on('mouse:over', function(e) {
-  if (e.target) {
-    var hexagon = e.target;
-    if (!hexagon.clicked) {
-      hexagon.setColor('#7FB7DB');
-    }
-  }
-  this.renderAll();
-});
-
-canvas.on('mouse:out', function(e) {
-  if (e.target) {
-    var hexagon = e.target;
-    if (!hexagon.clicked) {
-      hexagon.setColor('#D3E5F0');
-    }
-  }
-  this.renderAll();
-});*/
 
 canvas.on('mouse:up', function(e) {
   if (e.target) {

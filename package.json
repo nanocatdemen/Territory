@@ -2,9 +2,6 @@
   "name": "Territory",
   "description": "A game about Territories.",
   "version": "0.0.1-b",
-  "dependencies": {
-    "jquery": "^1.11.1"
-  },
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
